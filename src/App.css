@@ -112,6 +112,12 @@
   font-size: 12px;
 }
 
+.home-footer-copy {
+  margin-top: 6px;
+  font-size: 11px;
+  color: #ccc;
+}
+
 /* ── iOS Guide ── */
 .ios-guide {
   position: fixed;

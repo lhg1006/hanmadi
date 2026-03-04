@@ -139,6 +139,9 @@ function App() {
             <p className="home-footer-text">
               총 {categories.reduce((sum, c) => sum + c.quotes.length, 0)}개의 명언
             </p>
+            <p className="home-footer-copy">
+              &copy; 2026 한마디. All rights reserved.
+            </p>
           </div>
 
           {showIOSGuide && (
