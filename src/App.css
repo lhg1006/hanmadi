@@ -50,7 +50,7 @@
 .title {
   font-size: 16px;
   font-weight: 500;
-  color: #999;
+  color: #1a1a1a;
   margin: 0;
   letter-spacing: -0.3px;
 }
@@ -83,10 +83,81 @@
   border-color: #bbb;
 }
 
+.install-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  max-width: 320px;
+  margin: 8px auto 0;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 14px;
+  background: none;
+  color: #666;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.install-btn:active {
+  color: #333;
+}
+
 .home-footer-text {
   margin-top: 10px;
   color: #ccc;
   font-size: 12px;
+}
+
+/* ── iOS Guide ── */
+.ios-guide {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #fff;
+  border-radius: 20px 20px 0 0;
+  padding: 28px 24px;
+  z-index: 200;
+  box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.12);
+  animation: guideSlideUp 0.3s ease-out;
+}
+
+@keyframes guideSlideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+.ios-guide-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.ios-guide-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 15px;
+  color: #555;
+  margin-bottom: 20px;
+}
+
+.ios-guide-close {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 12px;
+  background: #1a1a1a;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
 }
 
 /* ── Keyframes ── */
