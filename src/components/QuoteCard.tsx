@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import type { Quote, Category } from "../data/quotes";
 import { CategoryIcon } from "./Icons";
 import "./QuoteCard.css";
@@ -29,6 +29,7 @@ export default function QuoteCard({
   const [cardState, setCardState] = useState<"idle" | "spin-out" | "spin-in">("idle");
   const [displayQuote, setDisplayQuote] = useState(quote);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [copied, setCopied] = useState(false);
   const touchStartY = useRef(0);
   const touchStartX = useRef(0);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -74,6 +75,29 @@ export default function QuoteCard({
       onNext();
     }
   };
+
+  const handleShare = useCallback(async () => {
+    const text = `"${displayQuote.text}"\n— ${displayQuote.author}`;
+
+    if (navigator.share) {
+      try {
+        await navigator.share({ text });
+      } catch {
+        // 사용자가 공유 취소
+      }
+    } else {
+      await navigator.clipboard.writeText(text);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  }, [displayQuote]);
+
+  const handleCardCopy = useCallback(async () => {
+    const text = `"${displayQuote.text}"\n— ${displayQuote.author}`;
+    await navigator.clipboard.writeText(text);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  }, [displayQuote]);
 
   return (
     <div
@@ -148,7 +172,7 @@ export default function QuoteCard({
 
       {/* Fixed size card with 3D spin */}
       <div className="quote-content-wrapper">
-        <div className={`quote-card-fixed card-${cardState}`}>
+        <div className={`quote-card-fixed card-${cardState}`} onClick={handleCardCopy}>
           <div className="quote-mark">"</div>
           <p className="quote-text">
             {displayQuote.text.split(/(?<=[.,]\s?)/).map((segment, i, arr) => (
@@ -161,12 +185,40 @@ export default function QuoteCard({
           <p className="quote-author">— {displayQuote.author}</p>
         </div>
       </div>
+      <p className={`card-copy-hint ${copied ? "hint-copied" : ""}`}>
+        {copied ? (
+          <>
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style={{verticalAlign: "-2px", marginRight: "4px"}}>
+              <circle cx="7" cy="7" r="6.5" stroke="#4361EE" strokeWidth="1.2"/>
+              <path d="M4.5 7L6.2 8.8L9.5 5.2" stroke="#4361EE" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+            클립보드에 복사되었습니다
+          </>
+        ) : (
+          <>
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style={{verticalAlign: "-2px", marginRight: "4px"}}>
+              <rect x="4.5" y="1.5" width="7" height="9" rx="1.5" stroke="currentColor" strokeWidth="1.2"/>
+              <path d="M2.5 4.5V11C2.5 11.6 2.9 12 3.5 12H9" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/>
+            </svg>
+            카드를 탭하면 명언이 복사됩니다
+          </>
+        )}
+      </p>
 
       {/* Bottom actions */}
       <div className="quote-bottom">
-        <button className="next-btn" onClick={onNext}>
-          다른 명언 보기
-        </button>
+        <div className="bottom-buttons">
+          <button className="share-btn" onClick={handleShare}>
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <path d="M4 12V16C4 16.6 4.4 17 5 17H15C15.6 17 16 16.6 16 16V12" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M10 3V13" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
+              <path d="M7 6L10 3L13 6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </button>
+          <button className="next-btn" onClick={onNext}>
+            다른 명언 보기
+          </button>
+        </div>
         <p className="swipe-hint">위로 스와이프해도 넘어갑니다</p>
       </div>
     </div>

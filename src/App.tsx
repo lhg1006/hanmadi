@@ -68,13 +68,8 @@ function App() {
       {screen === "home" && (
         <div className="home-screen">
           <header className="header">
-            <div className="header-icon"><QuoteIcon size={56} color="#333" /></div>
+            <QuoteIcon size={28} color="#333" />
             <h1 className="title">오늘의 명언</h1>
-            <p className="subtitle">
-              당신에게 필요한 한마디를
-              <br />
-              만나보세요
-            </p>
           </header>
 
           <CategorySelector
