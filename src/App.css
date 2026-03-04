@@ -27,18 +27,32 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
+  gap: 2px;
   padding: 16px 0 12px;
   flex-shrink: 0;
   animation: fadeSlideUp 0.5s ease-out 0.15s both;
 }
 
-.title {
-  font-size: 28px;
+.header-top {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.header-app-name {
+  font-size: 20px;
   font-weight: 800;
   color: #1a1a1a;
+  letter-spacing: -0.5px;
+}
+
+.title {
+  font-size: 16px;
+  font-weight: 500;
+  color: #999;
   margin: 0;
-  letter-spacing: -1px;
+  letter-spacing: -0.3px;
 }
 
 /* ── Bottom ── */
