@@ -63,10 +63,11 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 13px;
-  color: #999;
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
   background: #fff;
-  padding: 6px 14px;
+  padding: 8px 16px;
   border-radius: 20px;
   position: absolute;
   left: 50%;
@@ -263,7 +264,7 @@
 }
 
 .quote-text {
-  font-size: 20px;
+  font-size: 28px;
   line-height: 1.2;
   color: #1a1a1a;
   font-weight: 500;
@@ -274,7 +275,7 @@
 }
 
 .quote-author {
-  font-size: 14px;
+  font-size: 16px;
   color: #aaa;
   font-style: italic;
   flex-shrink: 0;
@@ -344,7 +345,7 @@
   border-radius: 14px;
   background: #1a1a1a;
   color: #fff;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 600;
   cursor: pointer;
   transition: transform 0.15s ease, background 0.2s ease, box-shadow 0.2s ease;
