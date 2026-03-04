@@ -1,0 +1,197 @@
+.daily-five-screen {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: #f5f5f5;
+  padding: 0 20px;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  overflow: hidden;
+  animation: d5ScreenIn 0.4s ease-out;
+}
+
+@keyframes d5ScreenIn {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ── Top bar ── */
+.daily-five-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 0;
+  flex-shrink: 0;
+  animation: d5TopbarIn 0.35s ease-out 0.1s both;
+}
+
+@keyframes d5TopbarIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.daily-five-back {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  color: #666;
+  font-size: 15px;
+  cursor: pointer;
+  padding: 8px 4px;
+  transition: transform 0.15s ease;
+}
+
+.daily-five-back:active {
+  opacity: 0.5;
+  transform: translateX(-4px);
+}
+
+.daily-five-back-icon {
+  font-size: 24px;
+  line-height: 1;
+  font-weight: 300;
+}
+
+.daily-five-date {
+  font-size: 13px;
+  color: #999;
+  background: #fff;
+  padding: 6px 14px;
+  border-radius: 20px;
+}
+
+/* ── Scroll area ── */
+.daily-five-scroll {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 32px;
+  min-height: 0;
+}
+
+.daily-five-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: #1a1a1a;
+  text-align: center;
+  margin: 8px 0 20px;
+  letter-spacing: -0.5px;
+  animation: d5TitleIn 0.45s ease-out 0.2s both;
+}
+
+@keyframes d5TitleIn {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ── Cards ── */
+.daily-five-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.daily-five-card {
+  background: #fff;
+  border-radius: 18px;
+  padding: 22px 20px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+  animation: d5CardIn 0.45s ease-out both;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.daily-five-card:nth-child(1) { animation-delay: 0.3s; }
+.daily-five-card:nth-child(2) { animation-delay: 0.42s; }
+.daily-five-card:nth-child(3) { animation-delay: 0.54s; }
+.daily-five-card:nth-child(4) { animation-delay: 0.66s; }
+.daily-five-card:nth-child(5) { animation-delay: 0.78s; }
+
+@keyframes d5CardIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.daily-five-card-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.daily-five-cat-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: #888;
+}
+
+.daily-five-text {
+  font-size: 17px;
+  line-height: 1.7;
+  color: #1a1a1a;
+  font-weight: 500;
+  word-break: keep-all;
+  letter-spacing: -0.3px;
+  margin: 0 0 10px;
+}
+
+.daily-five-author {
+  font-size: 13px;
+  color: #aaa;
+  font-style: italic;
+  margin: 0;
+}
+
+/* ── Desktop ── */
+@media (min-width: 600px) {
+  .daily-five-screen {
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  .daily-five-title {
+    font-size: 26px;
+  }
+
+  .daily-five-text {
+    font-size: 19px;
+  }
+}
+
+@media (hover: hover) {
+  .daily-five-back:hover {
+    color: #333;
+    transform: translateX(-2px);
+  }
+
+  .daily-five-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  }
+}

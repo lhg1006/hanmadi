@@ -3,8 +3,11 @@ import { categories } from "./data/quotes";
 import type { Quote } from "./data/quotes";
 import CategorySelector from "./components/CategorySelector";
 import QuoteCard from "./components/QuoteCard";
+import DailyFive from "./components/DailyFive";
 import { QuoteIcon } from "./components/Icons";
 import "./App.css";
+
+type Screen = "home" | "quote" | "dailyFive";
 
 function getRandomQuote(categoryId: string, current?: Quote | null): Quote | null {
   const category = categories.find((c) => c.id === categoryId);
@@ -19,12 +22,14 @@ function getRandomQuote(categoryId: string, current?: Quote | null): Quote | nul
 }
 
 function App() {
+  const [screen, setScreen] = useState<Screen>("home");
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [quote, setQuote] = useState<Quote | null>(null);
 
   const handleSelect = useCallback((id: string) => {
     setSelectedCategory(id);
     setQuote(getRandomQuote(id));
+    setScreen("quote");
   }, []);
 
   const handleNext = useCallback(() => {
@@ -36,13 +41,31 @@ function App() {
   const handleBack = useCallback(() => {
     setSelectedCategory(null);
     setQuote(null);
+    setScreen("home");
+  }, []);
+
+  const handleChangeCategory = useCallback((id: string) => {
+    setSelectedCategory(id);
+    setQuote(getRandomQuote(id));
+  }, []);
+
+  const handleGoHome = useCallback(() => {
+    setSelectedCategory(null);
+    setQuote(null);
+    setScreen("home");
+  }, []);
+
+  const handleGoDailyFive = useCallback(() => {
+    setSelectedCategory(null);
+    setQuote(null);
+    setScreen("dailyFive");
   }, []);
 
   const selectedCat = categories.find((c) => c.id === selectedCategory);
 
   return (
     <div className="app">
-      {!quote ? (
+      {screen === "home" && (
         <div className="home-screen">
           <header className="header">
             <div className="header-icon"><QuoteIcon size={56} color="#333" /></div>
@@ -60,18 +83,33 @@ function App() {
             onSelect={handleSelect}
           />
 
-          <footer className="home-footer">
-            <p>총 {categories.reduce((sum, c) => sum + c.quotes.length, 0)}개의 명언</p>
-          </footer>
+          <div className="home-bottom">
+            <button className="daily-five-btn" onClick={() => setScreen("dailyFive")}>
+              오늘의 다섯 명언 한번에 보기
+            </button>
+            <p className="home-footer-text">
+              총 {categories.reduce((sum, c) => sum + c.quotes.length, 0)}개의 명언
+            </p>
+          </div>
         </div>
-      ) : (
+      )}
+
+      {screen === "quote" && quote && (
         <QuoteCard
           quote={quote}
           categoryName={selectedCat?.name ?? ""}
           categoryId={selectedCat?.id ?? ""}
+          categories={categories}
           onNext={handleNext}
           onBack={handleBack}
+          onChangeCategory={handleChangeCategory}
+          onGoHome={handleGoHome}
+          onGoDailyFive={handleGoDailyFive}
         />
+      )}
+
+      {screen === "dailyFive" && (
+        <DailyFive onBack={handleBack} />
       )}
     </div>
   );
