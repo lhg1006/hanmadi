@@ -3,13 +3,13 @@ interface IconProps {
   color?: string;
 }
 
-/** 헤더 - 말풍선 따옴표 */
+/** 헤더 - 펼쳐진 책 + 따옴표 */
 export function QuoteIcon({ size = 48, color = "#333" }: IconProps) {
   return (
-    <svg width={size} height={size} viewBox="0 0 48 48" fill="none">
-      <rect x="4" y="6" width="40" height="30" rx="8" fill={color} />
-      <path d="M16 36L12 42L22 36" fill={color} />
-      <text x="24" y="27" textAnchor="middle" fill="#fff" fontSize="22" fontFamily="Georgia, serif" fontWeight="bold">"</text>
+    <svg width={size} height={size} viewBox="0 0 32 32" fill="none">
+      <path d="M16 8C14 7 11 6.5 7 7V23C11 22.5 14 23 16 24C18 23 21 22.5 25 23V7C21 6.5 18 7 16 8Z" fill="none" stroke={color} strokeWidth="1.5" strokeLinejoin="round"/>
+      <line x1="16" y1="8" x2="16" y2="24" stroke={color} strokeWidth="1.2"/>
+      <text x="16" y="7" textAnchor="middle" fontFamily="Georgia, serif" fontSize="8" fontWeight="bold" fill={color}>"</text>
     </svg>
   );
 }

@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
 import { categories } from "./data/quotes";
 import type { Quote } from "./data/quotes";
 import CategorySelector from "./components/CategorySelector";
@@ -9,32 +9,38 @@ import "./App.css";
 
 type Screen = "home" | "quote" | "dailyFive";
 
-function getRandomQuote(categoryId: string, current?: Quote | null): Quote | null {
-  const category = categories.find((c) => c.id === categoryId);
-  if (!category) return null;
-  if (category.quotes.length <= 1) return category.quotes[0] ?? null;
-  let next: Quote;
-  do {
-    const idx = Math.floor(Math.random() * category.quotes.length);
-    next = category.quotes[idx];
-  } while (current && next.text === current.text);
-  return next;
+function shuffle<T>(arr: T[]): T[] {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
 }
 
 function App() {
   const [screen, setScreen] = useState<Screen>("home");
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [quote, setQuote] = useState<Quote | null>(null);
+  const queues = useRef<Record<string, Quote[]>>({});
+
+  const nextFromQueue = (catId: string): Quote => {
+    if (!queues.current[catId] || queues.current[catId].length === 0) {
+      const cat = categories.find((c) => c.id === catId)!;
+      queues.current[catId] = shuffle(cat.quotes);
+    }
+    return queues.current[catId].pop()!;
+  };
 
   const handleSelect = useCallback((id: string) => {
     setSelectedCategory(id);
-    setQuote(getRandomQuote(id));
+    setQuote(nextFromQueue(id));
     setScreen("quote");
   }, []);
 
   const handleNext = useCallback(() => {
     if (selectedCategory) {
-      setQuote((prev) => getRandomQuote(selectedCategory, prev));
+      setQuote(nextFromQueue(selectedCategory));
     }
   }, [selectedCategory]);
 
@@ -46,7 +52,7 @@ function App() {
 
   const handleChangeCategory = useCallback((id: string) => {
     setSelectedCategory(id);
-    setQuote(getRandomQuote(id));
+    setQuote(nextFromQueue(id));
   }, []);
 
   const handleGoHome = useCallback(() => {

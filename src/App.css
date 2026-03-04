@@ -24,13 +24,18 @@
 
 /* ── Header ── */
 .header {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
   padding: 16px 0 12px;
   flex-shrink: 0;
   animation: fadeSlideUp 0.5s ease-out 0.15s both;
+}
+
+.header svg {
+  position: absolute;
+  right: calc(50% + 52px);
 }
 
 .title {

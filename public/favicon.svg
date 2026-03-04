@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- 배경 -->
+  <rect width="32" height="32" rx="7" fill="#1a1a1a"/>
+  <!-- 펼쳐진 책 -->
+  <path d="M16 8C14 7 11 6.5 7 7V23C11 22.5 14 23 16 24C18 23 21 22.5 25 23V7C21 6.5 18 7 16 8Z" fill="none" stroke="#fff" stroke-width="1.5" stroke-linejoin="round"/>
+  <line x1="16" y1="8" x2="16" y2="24" stroke="#fff" stroke-width="1.2"/>
+  <!-- 따옴표 -->
+  <text x="16" y="7" text-anchor="middle" font-family="Georgia, serif" font-size="8" font-weight="bold" fill="#fff">"</text>
+</svg>
