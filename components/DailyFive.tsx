@@ -1,6 +1,8 @@
+"use client";
+
 import { useMemo } from "react";
-import { categories } from "../data/quotes";
-import type { Quote } from "../data/quotes";
+import { categories } from "@/data/quotes";
+import type { Quote } from "@/data/quotes";
 import { CategoryIcon } from "./Icons";
 import "./DailyFive.css";
 

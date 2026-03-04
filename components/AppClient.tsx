@@ -1,11 +1,13 @@
+"use client";
+
 import { useState, useCallback, useRef, useEffect } from "react";
-import { categories } from "./data/quotes";
-import type { Quote } from "./data/quotes";
-import CategorySelector from "./components/CategorySelector";
-import QuoteCard from "./components/QuoteCard";
-import DailyFive from "./components/DailyFive";
-import { QuoteIcon } from "./components/Icons";
-import "./App.css";
+import { categories } from "@/data/quotes";
+import type { Quote } from "@/data/quotes";
+import CategorySelector from "@/components/CategorySelector";
+import QuoteCard from "@/components/QuoteCard";
+import DailyFive from "@/components/DailyFive";
+import { QuoteIcon } from "@/components/Icons";
+import "./AppClient.css";
 
 type Screen = "home" | "quote" | "dailyFive";
 
@@ -19,6 +21,7 @@ function shuffle<T>(arr: T[]): T[] {
 }
 
 function getInitialScreen(): Screen {
+  if (typeof window === "undefined") return "home";
   const params = new URLSearchParams(window.location.search);
   if (params.get("mode") === "dailyFive") return "dailyFive";
   return "home";
@@ -28,15 +31,18 @@ interface BeforeInstallPromptEvent extends Event {
   prompt(): Promise<void>;
 }
 
-const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-const isStandalone = window.matchMedia("(display-mode: standalone)").matches
-  || ("standalone" in navigator && (navigator as unknown as { standalone: boolean }).standalone);
+const isIOS = typeof navigator !== "undefined" && /iPad|iPhone|iPod/.test(navigator.userAgent);
+const isStandalone =
+  typeof window !== "undefined" &&
+  (window.matchMedia("(display-mode: standalone)").matches ||
+    ("standalone" in navigator && (navigator as unknown as { standalone: boolean }).standalone));
 
-function App() {
+export default function AppClient() {
   const [screen, setScreen] = useState<Screen>(getInitialScreen);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [quote, setQuote] = useState<Quote | null>(null);
   const [isHidden, setIsHidden] = useState(false);
+  const [hasPrev, setHasPrev] = useState(false);
   const queues = useRef<Record<string, Quote[]>>({});
   const history = useRef<{ quote: Quote; hidden: boolean }[]>([]);
   const cooldown = useRef(0);
@@ -79,6 +85,7 @@ function App() {
     setSelectedCategory(id);
     const q = nextFromQueue(id);
     history.current = [];
+    setHasPrev(false);
     setIsHidden(rollHidden());
     setQuote(q);
     setScreen("quote");
@@ -87,6 +94,7 @@ function App() {
   const handleNext = useCallback(() => {
     if (selectedCategory) {
       if (quote) history.current.push({ quote, hidden: isHidden });
+      setHasPrev(true);
       setIsHidden(rollHidden());
       setQuote(nextFromQueue(selectedCategory));
     }
@@ -97,6 +105,7 @@ function App() {
       const prev = history.current.pop()!;
       setQuote(prev.quote);
       setIsHidden(prev.hidden);
+      setHasPrev(history.current.length > 0);
     }
   }, []);
 
@@ -174,7 +183,7 @@ function App() {
                 <p className="ios-guide-title">홈 화면에 추가하기</p>
                 <div className="ios-guide-steps">
                   <p>1. 하단의 <strong>공유 버튼</strong>을 탭하세요</p>
-                  <p>2. <strong>"홈 화면에 추가"</strong>를 선택하세요</p>
+                  <p>2. <strong>&quot;홈 화면에 추가&quot;</strong>를 선택하세요</p>
                 </div>
                 <button className="ios-guide-close" onClick={() => setShowIOSGuide(false)}>확인</button>
               </div>
@@ -192,7 +201,7 @@ function App() {
           isHidden={isHidden}
           onNext={handleNext}
           onPrev={handlePrev}
-          hasPrev={history.current.length > 0}
+          hasPrev={hasPrev}
           onBack={handleBack}
           onChangeCategory={handleChangeCategory}
           onGoHome={handleGoHome}
@@ -206,5 +215,3 @@ function App() {
     </div>
   );
 }
-
-export default App;

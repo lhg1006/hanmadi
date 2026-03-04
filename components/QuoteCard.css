@@ -250,6 +250,7 @@
 .card-hidden {
   background: linear-gradient(145deg, #1a1a1a 0%, #2a2a2a 50%, #1a1a1a 100%);
   border: 2px solid #FFD700;
+  box-shadow: 0 0 24px rgba(255, 215, 0, 0.2);
   position: relative;
   overflow: hidden;
 }

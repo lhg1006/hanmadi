@@ -1,5 +1,7 @@
+"use client";
+
 import { useEffect, useState, useRef, useCallback } from "react";
-import type { Quote, Category } from "../data/quotes";
+import type { Quote, Category } from "@/data/quotes";
 import { CategoryIcon } from "./Icons";
 import "./QuoteCard.css";
 
@@ -44,7 +46,7 @@ export default function QuoteCard({
   const isFirstRender = useRef(true);
 
   useEffect(() => {
-    setAnimating(true);
+    setAnimating(true); // eslint-disable-line react-hooks/set-state-in-effect
     if (isFirstRender.current) {
       isFirstRender.current = false;
       setDisplayQuote(quote);

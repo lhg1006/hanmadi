@@ -1,4 +1,6 @@
-import type { Category } from "../data/quotes";
+"use client";
+
+import type { Category } from "@/data/quotes";
 import { CategoryIcon } from "./Icons";
 import "./CategorySelector.css";
 
