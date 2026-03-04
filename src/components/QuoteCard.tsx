@@ -9,6 +9,8 @@ interface Props {
   categoryId: string;
   categories: Category[];
   onNext: () => void;
+  onPrev: () => void;
+  hasPrev: boolean;
   onBack: () => void;
   onChangeCategory: (id: string) => void;
   onGoHome: () => void;
@@ -21,6 +23,8 @@ export default function QuoteCard({
   categoryId,
   categories,
   onNext,
+  onPrev,
+  hasPrev,
   onBack,
   onChangeCategory,
   onGoHome,
@@ -73,7 +77,7 @@ export default function QuoteCard({
     const deltaX = Math.abs(touchStartX.current - e.changedTouches[0].clientX);
     if (deltaX < 100 && !menuOpen) {
       if (deltaY > 60) onNext();
-      if (deltaY < -60) onBack();
+      if (deltaY < -60 && hasPrev) onPrev();
     }
   };
 
@@ -211,7 +215,7 @@ export default function QuoteCard({
           </>
         )}
       </p>
-      <p className="swipe-hint">위로 스와이프: 다음 명언 · 아래로 스와이프: 뒤로</p>
+      <p className="swipe-hint">위로 스와이프: 다음 명언 · 아래로 스와이프: 이전 명언</p>
 
       {/* Bottom actions */}
       <div className="quote-bottom">

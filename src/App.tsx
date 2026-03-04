@@ -37,6 +37,7 @@ function App() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [quote, setQuote] = useState<Quote | null>(null);
   const queues = useRef<Record<string, Quote[]>>({});
+  const history = useRef<Quote[]>([]);
   const [installPrompt, setInstallPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [showIOSGuide, setShowIOSGuide] = useState(false);
 
@@ -68,15 +69,24 @@ function App() {
 
   const handleSelect = useCallback((id: string) => {
     setSelectedCategory(id);
-    setQuote(nextFromQueue(id));
+    const q = nextFromQueue(id);
+    history.current = [];
+    setQuote(q);
     setScreen("quote");
   }, []);
 
   const handleNext = useCallback(() => {
     if (selectedCategory) {
+      if (quote) history.current.push(quote);
       setQuote(nextFromQueue(selectedCategory));
     }
-  }, [selectedCategory]);
+  }, [selectedCategory, quote]);
+
+  const handlePrev = useCallback(() => {
+    if (history.current.length > 0) {
+      setQuote(history.current.pop()!);
+    }
+  }, []);
 
   const handleBack = useCallback(() => {
     setSelectedCategory(null);
@@ -167,6 +177,8 @@ function App() {
           categoryId={selectedCat?.id ?? ""}
           categories={categories}
           onNext={handleNext}
+          onPrev={handlePrev}
+          hasPrev={history.current.length > 0}
           onBack={handleBack}
           onChangeCategory={handleChangeCategory}
           onGoHome={handleGoHome}
