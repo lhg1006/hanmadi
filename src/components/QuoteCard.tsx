@@ -34,28 +34,34 @@ export default function QuoteCard({
 }: Props) {
   const [cardState, setCardState] = useState<"idle" | "spin-out" | "spin-in">("idle");
   const [displayQuote, setDisplayQuote] = useState(quote);
+  const [displayHidden, setDisplayHidden] = useState(isHidden);
   const [menuOpen, setMenuOpen] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [animating, setAnimating] = useState(false);
   const touchStartY = useRef(0);
   const touchStartX = useRef(0);
   const menuRef = useRef<HTMLDivElement>(null);
   const isFirstRender = useRef(true);
 
   useEffect(() => {
+    setAnimating(true);
     if (isFirstRender.current) {
       isFirstRender.current = false;
       setDisplayQuote(quote);
+      setDisplayHidden(isHidden);
       setCardState("spin-in");
-      return;
+      const done = setTimeout(() => setAnimating(false), 500);
+      return () => clearTimeout(done);
     }
-    // 새 명언이 들어오면: spin-out → 내용 교체 → spin-in
     setCardState("spin-out");
     const timer = setTimeout(() => {
       setDisplayQuote(quote);
+      setDisplayHidden(isHidden);
       setCardState("spin-in");
+      setTimeout(() => setAnimating(false), 500);
     }, 350);
     return () => clearTimeout(timer);
-  }, [quote]);
+  }, [quote, isHidden]);
 
   // 메뉴 바깥 클릭 시 닫기
   useEffect(() => {
@@ -77,7 +83,7 @@ export default function QuoteCard({
   const handleTouchEnd = (e: React.TouchEvent) => {
     const deltaY = touchStartY.current - e.changedTouches[0].clientY;
     const deltaX = Math.abs(touchStartX.current - e.changedTouches[0].clientX);
-    if (deltaX < 100 && !menuOpen) {
+    if (deltaX < 100 && !menuOpen && !animating) {
       if (deltaY > 60) onNext();
       if (deltaY < -60 && hasPrev) onPrev();
     }
@@ -185,8 +191,8 @@ export default function QuoteCard({
 
       {/* Fixed size card with 3D spin */}
       <div className="quote-content-wrapper">
-        <div className={`quote-card-fixed card-${cardState}${isHidden ? " card-hidden" : ""}`} onClick={handleCardCopy}>
-          {isHidden ? (
+        <div className={`quote-card-fixed card-${cardState}${displayHidden ? " card-hidden" : ""}`} onClick={handleCardCopy}>
+          {displayHidden ? (
             <div className="hidden-badge">
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                 <path d="M8 1L9.8 5.8L15 6.2L11.2 9.6L12.4 15L8 12.2L3.6 15L4.8 9.6L1 6.2L6.2 5.8Z" fill="#FFD700"/>
@@ -244,7 +250,7 @@ export default function QuoteCard({
               <path d="M7 6L10 3L13 6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
           </button>
-          <button className="next-btn" onClick={onNext}>
+          <button className="next-btn" onClick={onNext} disabled={animating}>
             다른 명언 보기
           </button>
         </div>
