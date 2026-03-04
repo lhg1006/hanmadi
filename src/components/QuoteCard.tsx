@@ -26,15 +26,27 @@ export default function QuoteCard({
   onGoHome,
   onGoDailyFive,
 }: Props) {
-  const [visible, setVisible] = useState(false);
+  const [cardState, setCardState] = useState<"idle" | "spin-out" | "spin-in">("idle");
+  const [displayQuote, setDisplayQuote] = useState(quote);
   const [menuOpen, setMenuOpen] = useState(false);
   const touchStartY = useRef(0);
   const touchStartX = useRef(0);
   const menuRef = useRef<HTMLDivElement>(null);
+  const isFirstRender = useRef(true);
 
   useEffect(() => {
-    setVisible(false);
-    const timer = setTimeout(() => setVisible(true), 60);
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      setDisplayQuote(quote);
+      setCardState("spin-in");
+      return;
+    }
+    // 새 명언이 들어오면: spin-out → 내용 교체 → spin-in
+    setCardState("spin-out");
+    const timer = setTimeout(() => {
+      setDisplayQuote(quote);
+      setCardState("spin-in");
+    }, 350);
     return () => clearTimeout(timer);
   }, [quote]);
 
@@ -134,19 +146,19 @@ export default function QuoteCard({
       {/* 메뉴 열렸을 때 배경 오버레이 */}
       {menuOpen && <div className="menu-overlay" onClick={() => setMenuOpen(false)} />}
 
-      {/* Fixed size card */}
+      {/* Fixed size card with 3D spin */}
       <div className="quote-content-wrapper">
-        <div className={`quote-card-fixed ${visible ? "fade-in" : "fade-out"}`}>
+        <div className={`quote-card-fixed card-${cardState}`}>
           <div className="quote-mark">"</div>
           <p className="quote-text">
-            {quote.text.split(/(?<=[.,]\s?)/).map((segment, i, arr) => (
+            {displayQuote.text.split(/(?<=[.,]\s?)/).map((segment, i, arr) => (
               <span key={i}>
                 {segment.trim()}
                 {i < arr.length - 1 && <br />}
               </span>
             ))}
           </p>
-          <p className="quote-author">— {quote.author}</p>
+          <p className="quote-author">— {displayQuote.author}</p>
         </div>
       </div>
 
