@@ -83,11 +83,11 @@ export default function QuoteCard({
   };
 
   const handleTouchEnd = (e: React.TouchEvent) => {
-    const deltaY = touchStartY.current - e.changedTouches[0].clientY;
-    const deltaX = Math.abs(touchStartX.current - e.changedTouches[0].clientX);
-    if (deltaX < 100 && !menuOpen && !animating) {
-      if (deltaY > 60) onNext();
-      if (deltaY < -60 && hasPrev) onPrev();
+    const deltaX = touchStartX.current - e.changedTouches[0].clientX;
+    const deltaY = Math.abs(touchStartY.current - e.changedTouches[0].clientY);
+    if (deltaY < 100 && !menuOpen && !animating) {
+      if (deltaX > 60) onNext();
+      if (deltaX < -60 && hasPrev) onPrev();
     }
   };
 
@@ -211,12 +211,7 @@ export default function QuoteCard({
             </div>
           )}
           <p className="quote-text">
-            {displayQuote.text.split(/(?<=[.,]\s?)/).map((segment, i, arr) => (
-              <span key={i}>
-                {segment.trim()}
-                {i < arr.length - 1 && <br />}
-              </span>
-            ))}
+            {displayQuote.text}
           </p>
           <p className="quote-author">— {displayQuote.author}</p>
         </div>
@@ -240,7 +235,7 @@ export default function QuoteCard({
           </>
         )}
       </p>
-      <p className="swipe-hint">위로 스와이프: 다음 명언 · 아래로 스와이프: 이전 명언</p>
+      <p className="swipe-hint">← 스와이프: 다음 명언 · 스와이프: 이전 명언 →</p>
 
       {/* Bottom actions */}
       <div className="quote-bottom">
