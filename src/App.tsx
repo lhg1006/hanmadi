@@ -36,8 +36,16 @@ function App() {
   const [screen, setScreen] = useState<Screen>(getInitialScreen);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [quote, setQuote] = useState<Quote | null>(null);
+  const [isHidden, setIsHidden] = useState(false);
   const queues = useRef<Record<string, Quote[]>>({});
-  const history = useRef<Quote[]>([]);
+  const history = useRef<{ quote: Quote; hidden: boolean }[]>([]);
+  const cooldown = useRef(0);
+  const rollHidden = () => {
+    if (cooldown.current > 0) { cooldown.current--; return false; }
+    const hit = Math.random() < 0.08;
+    if (hit) cooldown.current = 5;
+    return hit;
+  };
   const [installPrompt, setInstallPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [showIOSGuide, setShowIOSGuide] = useState(false);
 
@@ -71,20 +79,24 @@ function App() {
     setSelectedCategory(id);
     const q = nextFromQueue(id);
     history.current = [];
+    setIsHidden(rollHidden());
     setQuote(q);
     setScreen("quote");
   }, []);
 
   const handleNext = useCallback(() => {
     if (selectedCategory) {
-      if (quote) history.current.push(quote);
+      if (quote) history.current.push({ quote, hidden: isHidden });
+      setIsHidden(rollHidden());
       setQuote(nextFromQueue(selectedCategory));
     }
-  }, [selectedCategory, quote]);
+  }, [selectedCategory, quote, isHidden]);
 
   const handlePrev = useCallback(() => {
     if (history.current.length > 0) {
-      setQuote(history.current.pop()!);
+      const prev = history.current.pop()!;
+      setQuote(prev.quote);
+      setIsHidden(prev.hidden);
     }
   }, []);
 
@@ -96,6 +108,7 @@ function App() {
 
   const handleChangeCategory = useCallback((id: string) => {
     setSelectedCategory(id);
+    setIsHidden(rollHidden());
     setQuote(nextFromQueue(id));
   }, []);
 
@@ -176,6 +189,7 @@ function App() {
           categoryName={selectedCat?.name ?? ""}
           categoryId={selectedCat?.id ?? ""}
           categories={categories}
+          isHidden={isHidden}
           onNext={handleNext}
           onPrev={handlePrev}
           hasPrev={history.current.length > 0}

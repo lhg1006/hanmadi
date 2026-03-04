@@ -5,6 +5,7 @@ import "./QuoteCard.css";
 
 interface Props {
   quote: Quote;
+  isHidden: boolean;
   categoryName: string;
   categoryId: string;
   categories: Category[];
@@ -19,6 +20,7 @@ interface Props {
 
 export default function QuoteCard({
   quote,
+  isHidden,
   categoryName,
   categoryId,
   categories,
@@ -183,8 +185,23 @@ export default function QuoteCard({
 
       {/* Fixed size card with 3D spin */}
       <div className="quote-content-wrapper">
-        <div className={`quote-card-fixed card-${cardState}`} onClick={handleCardCopy}>
-          <div className="quote-mark">"</div>
+        <div className={`quote-card-fixed card-${cardState}${isHidden ? " card-hidden" : ""}`} onClick={handleCardCopy}>
+          {isHidden ? (
+            <div className="hidden-badge">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M8 1L9.8 5.8L15 6.2L11.2 9.6L12.4 15L8 12.2L3.6 15L4.8 9.6L1 6.2L6.2 5.8Z" fill="#FFD700"/>
+              </svg>
+              오늘의 히든 명언
+            </div>
+          ) : (
+            <div className="card-logo">
+              <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                <path d="M16 8C14 7 11 6.5 7 7V23C11 22.5 14 23 16 24C18 23 21 22.5 25 23V7C21 6.5 18 7 16 8Z" stroke="#ccc" strokeWidth="1.5" strokeLinejoin="round"/>
+                <line x1="16" y1="8" x2="16" y2="24" stroke="#ccc" strokeWidth="1.2"/>
+                <text x="16" y="7" textAnchor="middle" fontFamily="Georgia, serif" fontSize="8" fontWeight="bold" fill="#ccc">"</text>
+              </svg>
+            </div>
+          )}
           <p className="quote-text">
             {displayQuote.text.split(/(?<=[.,]\s?)/).map((segment, i, arr) => (
               <span key={i}>
