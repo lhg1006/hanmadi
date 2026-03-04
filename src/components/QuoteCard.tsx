@@ -71,8 +71,9 @@ export default function QuoteCard({
   const handleTouchEnd = (e: React.TouchEvent) => {
     const deltaY = touchStartY.current - e.changedTouches[0].clientY;
     const deltaX = Math.abs(touchStartX.current - e.changedTouches[0].clientX);
-    if (deltaY > 60 && deltaX < 100 && !menuOpen) {
-      onNext();
+    if (deltaX < 100 && !menuOpen) {
+      if (deltaY > 60) onNext();
+      if (deltaY < -60) onBack();
     }
   };
 
@@ -210,7 +211,7 @@ export default function QuoteCard({
           </>
         )}
       </p>
-      <p className="swipe-hint">위로 스와이프해도 넘어갑니다</p>
+      <p className="swipe-hint">위로 스와이프: 다음 명언 · 아래로 스와이프: 뒤로</p>
 
       {/* Bottom actions */}
       <div className="quote-bottom">
