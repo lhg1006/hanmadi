@@ -264,7 +264,7 @@
 }
 
 .quote-text {
-  font-size: 28px;
+  font-size: 32px;
   line-height: 1.2;
   color: #1a1a1a;
   font-weight: 500;
@@ -283,9 +283,9 @@
 
 /* ── Card copy hint ── */
 .card-copy-hint {
-  margin-top: 12px;
-  font-size: 12px;
-  color: #bbb;
+  margin-top: 8px;
+  font-size: 14px;
+  color: #666;
   text-align: center;
   transition: color 0.3s ease;
 }
@@ -371,10 +371,10 @@
 }
 
 .swipe-hint {
-  margin-top: 12px;
-  font-size: 12px;
-  color: #ccc;
-  animation: pulse 2.5s ease-in-out infinite;
+  margin-top: 6px;
+  font-size: 14px;
+  color: #666;
+  text-align: center;
 }
 
 @keyframes pulse {

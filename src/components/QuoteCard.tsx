@@ -77,16 +77,22 @@ export default function QuoteCard({
   };
 
   const handleShare = useCallback(async () => {
-    const text = `"${displayQuote.text}"\n— ${displayQuote.author}`;
+    const url = window.location.origin;
 
     if (navigator.share) {
       try {
-        await navigator.share({ text });
+        await navigator.share({
+          title: "오늘의 명언 - 한마디",
+          text: `"${displayQuote.text}"\n— ${displayQuote.author}`,
+          url,
+        });
       } catch {
         // 사용자가 공유 취소
       }
     } else {
-      await navigator.clipboard.writeText(text);
+      await navigator.clipboard.writeText(
+        `"${displayQuote.text}"\n— ${displayQuote.author}\n\n${url}`
+      );
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     }
@@ -204,6 +210,7 @@ export default function QuoteCard({
           </>
         )}
       </p>
+      <p className="swipe-hint">위로 스와이프해도 넘어갑니다</p>
 
       {/* Bottom actions */}
       <div className="quote-bottom">
@@ -219,7 +226,6 @@ export default function QuoteCard({
             다른 명언 보기
           </button>
         </div>
-        <p className="swipe-hint">위로 스와이프해도 넘어갑니다</p>
       </div>
     </div>
   );
