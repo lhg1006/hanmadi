@@ -355,7 +355,8 @@
 /* ── Bottom actions ── */
 .quote-bottom {
   flex-shrink: 0;
-  padding: 16px 0 8px;
+  padding: 16px 0;
+  padding-bottom: calc(env(safe-area-inset-bottom, 16px) + 16px);
   margin-top: auto;
   text-align: center;
   animation: bottomSlideUp 0.4s ease-out 0.35s both;
